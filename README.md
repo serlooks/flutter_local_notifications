@@ -1,4 +1,4 @@
-# Flutter Local Notifications plugin
+# Flutter Local Notifications plugin 
 
 This repository consists hosts the following packages
 
