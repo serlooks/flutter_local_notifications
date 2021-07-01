@@ -5,13 +5,13 @@ import 'notification_details.dart';
 // ignore_for_file: public_member_api_docs
 extension IOSInitializationSettingsMapper on IOSInitializationSettings {
   Map<String, Object> toMap() => <String, Object>{
-        'requestAlertPermission': requestAlertPermission,
-        'requestCriticalAlertPermission': requestCriticalAlertPermission,
-        'requestSoundPermission': requestSoundPermission,
-        'requestBadgePermission': requestBadgePermission,
-        'defaultPresentAlert': defaultPresentAlert,
-        'defaultPresentSound': defaultPresentSound,
-        'defaultPresentBadge': defaultPresentBadge
+        'requestAlertPermission': requestAlertPermission ?? true,
+        'requestCriticalAlertPermission': requestCriticalAlertPermission ?? false,
+        'requestSoundPermission': requestSoundPermission ?? true,
+        'requestBadgePermission': requestBadgePermission ?? true,
+        'defaultPresentAlert': defaultPresentAlert ?? true,
+        'defaultPresentSound': defaultPresentSound ?? true,
+        'defaultPresentBadge': defaultPresentBadge ?? true
       };
 }
 

@@ -13,7 +13,6 @@ class IOSInitializationSettings {
     this.defaultPresentBadge = true,
     this.onDidReceiveLocalNotification,
   });
-        assert(requestCriticalAlertPermission != null),
 
   /// Request permission to display an alert.
   ///
@@ -23,7 +22,7 @@ class IOSInitializationSettings {
   /// Default value is false.
   ///
   /// This property is only applicable to iOS 12 or newer.
-  final bool? requestAlertPermission;
+  final bool? requestCriticalAlertPermission;
 
   /// Request permission to play a sound.
   ///

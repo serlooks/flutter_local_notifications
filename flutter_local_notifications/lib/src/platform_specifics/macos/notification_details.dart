@@ -28,7 +28,7 @@ class MacOSNotificationDetails {
   /// to [MacOSInitializationSettings.defaultPresentCriticalAlert].
   ///
   /// This property is only applicable to macOS 12.0 or newer.
-  final bool presentCrticalAlert;
+  final bool? presentCriticalAlert;
 
   /// Play a sound when the notification is triggered while app is in
   /// the foreground.

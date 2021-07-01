@@ -5,6 +5,8 @@ class MacOSInitializationSettings {
     this.requestAlertPermission = true,
     this.requestSoundPermission = true,
     this.requestBadgePermission = true,
+    this.requestCriticalAlertPermission = false,
+    this.defaultPresentCriticalAlert = false,
     this.defaultPresentAlert = true,
     this.defaultPresentSound = true,
     this.defaultPresentBadge = true,
@@ -13,17 +15,22 @@ class MacOSInitializationSettings {
   /// Request permission to display an alert.
   ///
   /// Default value is true.
-  final bool requestAlertPermission;
+  final bool? requestAlertPermission;
+
+  /// Request permission for critical alerts.
+  ///
+  /// Default value is true.
+  final bool? requestCriticalAlertPermission;
 
   /// Request permission to play a sound.
   ///
   /// Default value is true.
-  final bool requestSoundPermission;
+  final bool? requestSoundPermission;
 
   /// Request permission to badge app icon.
   ///
   /// Default value is true.
-  final bool requestBadgePermission;
+  final bool? requestBadgePermission;
 
   /// Configures the default setting on if an alert should be displayed when a
   /// notification is triggered while app is in the foreground.
@@ -31,7 +38,15 @@ class MacOSInitializationSettings {
   /// Default value is true.
   /// This property is only applicable to macOS 10.14 or newer.
 
-  final bool defaultPresentAlert;
+  final bool? defaultPresentAlert;
+
+  /// Configures the default setting on if an critical alert should be displayed
+  ///  when a notification is triggered while app is in the foreground.
+  ///
+  /// Default value is true.
+  /// This property is only applicable to macOS 10.14 or newer.
+
+  final bool? defaultPresentCriticalAlert;
 
   /// Configures the default setting on if a sound should be played when a
   /// notification is triggered while app is in the foreground by default.
@@ -39,7 +54,7 @@ class MacOSInitializationSettings {
   /// Default value is true.
   ///
   /// This property is only applicable to macOS 10.14 or newer.
-  final bool defaultPresentSound;
+  final bool? defaultPresentSound;
 
   /// Configures the default setting on if a badge value should be applied when
   /// a notification is triggered while app is in the foreground by default.
@@ -47,5 +62,5 @@ class MacOSInitializationSettings {
   /// Default value is true.
   ///
   /// This property is only applicable to macOS 10.14 or newer.
-  final bool defaultPresentBadge;
+  final bool? defaultPresentBadge;
 }
