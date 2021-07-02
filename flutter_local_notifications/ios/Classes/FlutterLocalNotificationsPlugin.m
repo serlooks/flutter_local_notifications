@@ -3,6 +3,7 @@
 @implementation FlutterLocalNotificationsPlugin{
     FlutterMethodChannel* _channel;
     bool _displayAlert;
+    bool _displayCriticalAlert;
     bool _playSound;
     bool _updateBadge;
     bool _initialized;
@@ -233,14 +234,14 @@ static FlutterError *getFlutterError(NSError *error) {
     if([self containsKey:REQUEST_ALERT_PERMISSION forDictionary:arguments]) {
         requestedAlertPermission = [arguments[REQUEST_ALERT_PERMISSION] boolValue];
     }
-    if([self containsKey:REQUEST_CRTITICALALERT_PERMISSION forDictionary:arguments]) {
-        requestedCriticalAlertPermission = [arguments[REQUEST_CRTITICALALERT_PERMISSION] boolValue];
+    if([self containsKey:REQUEST_CRITICALALERT_PERMISSION forDictionary:arguments]) {
+        requestedCriticalAlertPermission = [arguments[REQUEST_CRITICALALERT_PERMISSION] boolValue];
     }
     if([self containsKey:REQUEST_BADGE_PERMISSION forDictionary:arguments]) {
         requestedBadgePermission = [arguments[REQUEST_BADGE_PERMISSION] boolValue];
     }
-    [self requestPermissionsImpl:requestedSoundPermission alertPermission:requestedAlertPermission criticalAlertPermission:requestedCriticalAlertPermission badgePermission:requestedBadgePermission  result:result];
-    
+    [self requestPermissionsImpl:requestedSoundPermission alertPermission:requestedAlertPermission crticalAlertPermission:requestedCriticalAlertPermission badgePermission:requestedBadgePermission result:result];
+
     _initialized = true;
 }
 
@@ -255,13 +256,13 @@ static FlutterError *getFlutterError(NSError *error) {
     if([self containsKey:ALERT_PERMISSION forDictionary:arguments]) {
         alertPermission = [arguments[ALERT_PERMISSION] boolValue];
     }
-    if([self containsKey:CRTITICALALERT_PERMISSION forDictionary:arguments]) {
+    if([self containsKey:CRITICALALERT_PERMISSION forDictionary:arguments]) {
         criticalAlertPermission = [arguments[CRITICALALERT_PERMISSION] boolValue];
     }
     if([self containsKey:BADGE_PERMISSION forDictionary:arguments]) {
         badgePermission = [arguments[BADGE_PERMISSION] boolValue];
     }
-    [self requestPermissionsImpl:soundPermission alertPermission:alertPermission criticalAlertPermission:criticalAlertPermission badgePermission:badgePermission result:result];
+    [self requestPermissionsImpl:soundPermission alertPermission:alertPermission crticalAlertPermission:criticalAlertPermission badgePermission:badgePermission result:result];
 }
 
 - (void)requestPermissionsImpl:(bool)soundPermission
@@ -275,7 +276,7 @@ static FlutterError *getFlutterError(NSError *error) {
     }
     if(@available(iOS 10.0, *)) {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        
+
         UNAuthorizationOptions authorizationOptions = 0;
         if (soundPermission) {
             authorizationOptions += UNAuthorizationOptionSound;
@@ -316,7 +317,7 @@ static FlutterError *getFlutterError(NSError *error) {
     if([self containsKey:BODY forDictionary:arguments]) {
         notification.alertBody = arguments[BODY];
     }
-    
+
     NSString *title;
     if([self containsKey:TITLE forDictionary:arguments]) {
         title = arguments[TITLE];
@@ -324,14 +325,14 @@ static FlutterError *getFlutterError(NSError *error) {
             notification.alertTitle = title;
         }
     }
-    
+
     bool presentAlert = _displayAlert;
     bool presentCriticalAlert = _displayCriticalAlert;
     bool presentSound = _playSound;
     bool presentBadge = _updateBadge;
     if(arguments[PLATFORM_SPECIFICS] != [NSNull null]) {
         NSDictionary *platformSpecifics = arguments[PLATFORM_SPECIFICS];
-        
+
         if([self containsKey:PRESENT_ALERT forDictionary:platformSpecifics]) {
             presentAlert = [[platformSpecifics objectForKey:PRESENT_ALERT] boolValue];
         }
@@ -344,20 +345,20 @@ static FlutterError *getFlutterError(NSError *error) {
         if([self containsKey:PRESENT_BADGE forDictionary:platformSpecifics]) {
             presentBadge = [[platformSpecifics objectForKey:PRESENT_BADGE] boolValue];
         }
-        
+
         if([self containsKey:BADGE_NUMBER forDictionary:platformSpecifics]) {
             notification.applicationIconBadgeNumber = [platformSpecifics[BADGE_NUMBER] integerValue];
         }
-        
+
         if([self containsKey:SOUND forDictionary:platformSpecifics]) {
             notification.soundName = [platformSpecifics[SOUND] stringValue];
         }
     }
-    
+
     if(presentSound && notification.soundName == nil) {
         notification.soundName = UILocalNotificationDefaultSoundName;
     }
-    
+
     notification.userInfo = [self buildUserDict:arguments[ID] title:title presentAlert:presentAlert presentCriticalAlert:presentCriticalAlert presentSound:presentSound presentBadge:presentBadge payload:arguments[PAYLOAD]];
     return notification;
 }
@@ -382,7 +383,7 @@ static FlutterError *getFlutterError(NSError *error) {
         UNMutableNotificationContent *content = [self buildStandardNotificationContent:arguments result:result];
         UNCalendarNotificationTrigger *trigger = [self buildUserNotificationCalendarTrigger:arguments];
         [self addNotificationRequest:[self getIdentifier:arguments] content:content result:result trigger:trigger];
-        
+
     } else {
         UILocalNotification * notification = [self buildStandardUILocalNotification:arguments];
         NSString *scheduledDateTime  = arguments[SCHEDULED_DATE_TIME];
@@ -607,14 +608,20 @@ static FlutterError *getFlutterError(NSError *error) {
             }
         }
         if([self containsKey:SOUND forDictionary:platformSpecifics]) {
-            content.sound = [UNNotificationSound soundNamed:platformSpecifics[SOUND]];
+            if (presentCriticalAlert)
+                content.sound = [UNNotificationSound criticalSoundNamed:platformSpecifics[SOUND] withAudioVolume: 1.0];
+            else
+                content.sound = [UNNotificationSound soundNamed:platformSpecifics[SOUND]];
         }
         if([self containsKey:SUBTITLE forDictionary:platformSpecifics]) {
             content.subtitle = platformSpecifics[SUBTITLE];
         }
     }
     if(presentSound && content.sound == nil) {
-        content.sound = UNNotificationSound.defaultSound;
+        if(presentCriticalAlert)
+            content.sound = UNNotificationSound.defaultCriticalSound;
+        else
+            content.sound = UNNotificationSound.defaultSound;
     }
     content.userInfo = [self buildUserDict:arguments[ID] title:content.title presentAlert:presentAlert presentCriticalAlert:presentCriticalAlert presentSound:presentSound presentBadge:presentBadge payload:arguments[PAYLOAD]];
     return content;

@@ -28,7 +28,7 @@ class IOSNotificationDetails {
   /// to [IOSInitializationSettings.defaultPresentCriticalAlert].
   ///
   /// This property is only applicable to iOS 12 or newer.
-  final bool presentCriticalAlert;
+  final bool? presentCriticalAlert;
 
   /// Play a sound when the notification is triggered while app is in
   /// the foreground.

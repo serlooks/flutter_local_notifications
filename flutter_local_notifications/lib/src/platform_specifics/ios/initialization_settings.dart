@@ -13,27 +13,26 @@ class IOSInitializationSettings {
     this.defaultPresentBadge = true,
     this.onDidReceiveLocalNotification,
   });
-        assert(requestCriticalAlertPermission != null),
 
   /// Request permission to display an alert.
   ///
   /// Default value is true.
-  final bool requestAlertPermission;
+  final bool? requestAlertPermission;
 
   /// Default value is false.
   ///
   /// This property is only applicable to iOS 12 or newer.
-  final bool requestAlertPermission;
+  final bool? requestCriticalAlertPermission;
 
   /// Request permission to play a sound.
   ///
   /// Default value is true.
-  final bool requestSoundPermission;
+  final bool? requestSoundPermission;
 
   /// Request permission to badge app icon.
   ///
   /// Default value is true.
-  final bool requestBadgePermission;
+  final bool? requestBadgePermission;
 
   /// Configures the default setting on if an alert should be displayed when a
   /// notification is triggered while app is in the foreground.
@@ -42,7 +41,7 @@ class IOSInitializationSettings {
   ///
   /// This property is only applicable to iOS 10 or newer.
 
-  final bool defaultPresentAlert;
+  final bool? defaultPresentAlert;
 
   /// Configures the default setting on if a sound should be played when a
   /// notification is triggered while app is in the foreground by default.
@@ -50,7 +49,7 @@ class IOSInitializationSettings {
   /// Default value is true.
   ///
   /// This property is only applicable to iOS 10 or newer.
-  final bool defaultPresentSound;
+  final bool? defaultPresentSound;
 
   /// Configures the default setting on if a badge value should be applied when
   /// a notification is triggered while app is in the foreground by default.
@@ -58,7 +57,7 @@ class IOSInitializationSettings {
   /// Default value is true.
   ///
   /// This property is only applicable to iOS 10 or newer.
-  final bool defaultPresentBadge;
+  final bool? defaultPresentBadge;
 
   /// Callback for handling when a notification is triggered while the app is
   /// in the foreground.

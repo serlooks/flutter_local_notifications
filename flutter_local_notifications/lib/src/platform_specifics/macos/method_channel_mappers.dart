@@ -5,14 +5,14 @@ import 'notification_details.dart';
 // ignore_for_file: public_member_api_docs
 extension MacOSInitializationSettingsMapper on MacOSInitializationSettings {
   Map<String, Object> toMap() => <String, Object>{
-        'requestAlertPermission': requestAlertPermission,
-        'requestCriticalAlertPermission': requestCriticalAlertPermission,
-        'requestSoundPermission': requestSoundPermission,
-        'requestBadgePermission': requestBadgePermission,
-        'defaultPresentAlert': defaultPresentAlert,
-        'defaultPresentCriticalAlert': defaultPresentCriticalAlert,
-        'defaultPresentSound': defaultPresentSound,
-        'defaultPresentBadge': defaultPresentBadge
+        'requestAlertPermission': requestAlertPermission ?? true,
+        'requestCriticalAlertPermission': requestCriticalAlertPermission ?? false,
+        'requestSoundPermission': requestSoundPermission ?? true,
+        'requestBadgePermission': requestBadgePermission ?? true,
+        'defaultPresentAlert': defaultPresentAlert ?? true,
+        'defaultPresentCriticalAlert': defaultPresentCriticalAlert ?? true,
+        'defaultPresentSound': defaultPresentSound ?? true,
+        'defaultPresentBadge': defaultPresentBadge ?? true
       };
 }
 
